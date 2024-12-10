@@ -1,23 +1,57 @@
-# 2024-GUI-Ground
+# 2024 Ground Station
+
+This repository contains the codebase for the **Ground Station Interface**, which includes the graphical user interface (GUI) for user interaction and the **Ground API** used by the CubeSat for sending data to the ground station.
 
 ## General Design
 
-The GUI will allow the user to interact with the CubeSat and also logging of data that are provided by the CubeSat. The functionality can be summarised as:
+The ground station serves as a central hub for monitoring, controlling, and logging CubeSat operations. Its features are divided across operational phases as follows:
 
-- Phase 1
-  - Shows Status of comms link and *potentially troubleshoot simple issues*
-  - Command cubesat to perform a detailed healthcheck, display that data to an user and log the data.
-- Phase 2
-  - Initiate the stage and provide the cubesat with number series that it should look for
-  - Provide image updates to showcase the identification results of the cubesat and also *provide a way to overide the automatic detection*
-- Phase 3
-  - Initiate this stage and its sub-phases *unless that is meant to be done automatically*
-  - Display some image frames to ensure the dock detection is done properly and to check alighment. *Also allow retrying of this step*
-  - For sub-phase 2, displays and stores images so that the user can manually identify and access the damages.
-  - For sub-phase 3, *maybe live feed*.
+### **Phase 1**
+
+- **Comms Link Monitoring**:
+  - Display the status of the communication link.
+  - Provide basic troubleshooting tools for simple issues.
+- **Health Check**:
+  - Command the CubeSat to perform a detailed health check.
+  - Display health check data to the user and log it for future reference.
+
+### **Phase 2**
+
+- **Stage Initiation**:
+  - Begin the phase by supplying the CubeSat with the target number series to detect.
+- **Detection Monitoring**:
+  - Display image updates showing the CubeSat’s identification results.
+  - Provide an option for manual override of automatic detection processes.
+
+### **Phase 3**
+
+- **Stage and Sub-Phase Control**:
+  - Initiate this phase and its sub-phases manually if not automated.
+- **Dock Detection**:
+  - Display real-time image frames to verify dock detection and alignment.
+  - Allow the user to retry alignment if necessary.
+- **Damage Assessment** (Sub-Phase 2):
+  - Show and store images for manual identification and assessment of damage.
+- **Live Feed** (Sub-Phase 3):
+  - Provide a live feed, if possible, to enhance situational awareness.
+
+## API Details
+
+The **Ground API** facilitates communication between the CubeSat and the ground station, supporting the following:
+
+### **Satellite-to-Ground Communication**
+
+- **Data Transmission**:
+  - The CubeSat sends telemetry, health reports, and image data to the ground station for display and storage.
+- **Event Logging**:
+  - Logs events, such as phase completions and detected anomalies, for future analysis.
+
+### **Error Handling**
+
+- Implements fail-safe mechanisms for both sending and receiving data, ensuring robust communication between the ground station and CubeSat.
 
 ## Design Inspiration
 
-The inspiration of the design was taken from Proxmox's Interface. Though the usecases are different, the core purpose is the same - to manage systems.
+The design takes inspiration from **Proxmox’s Interface**, focusing on simplicity and functionality. Although the use cases differ, the shared goal is system management. The GUI provides a streamlined workflow for monitoring, controlling, and troubleshooting the CubeSat.
 
-![alt text](./img_src/image.png)
+![Interface Mockup](./img_src/image.png)
