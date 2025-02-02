@@ -10,19 +10,19 @@
 </head>
 <body>
     <div class="header">
-        <a href="/">
+        <button onclick="location.href='/'" class="header-button">
             <h1>Dashboard - Main Page</h1>
-        </a>
+        </button>
     </div>
     <div class="overview">
         <h2>Options</h2>
-        <ul>
-            <li><a href="/phase1">Phase 1 - Health Check</a></li>
-            <li><a href="/phase2">Phase 2 - AOCS Calibration</a></li>
-            <li><a href="/phase3">Phase 3 - Main Test</a></li>
-            <li><a href="/log">Warning/Error Logs</a></li>
-            <li><a href="/config">Config</a></li>
-        </ul>
+        <div class="button-container">
+            <button onclick="location.href='/phase1'">Phase 1 - Health Check</button>
+            <button onclick="location.href='/phase2'">Phase 2 - AOCS Calibration</button>
+            <button onclick="location.href='/phase3'">Phase 3 - Main Test</button>
+            <button onclick="location.href='/log'">Warning/Error Logs</button>
+            <button onclick="location.href='/config'">Config</button>
+        </div>
     </div>
 
     <div class="status">
