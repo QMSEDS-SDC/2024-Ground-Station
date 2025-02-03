@@ -30,7 +30,7 @@ body {
   cursor: pointer;
   font: inherit;
   text-align: left;
-  padding: 10px 20px;
+  padding: 10px 0px;
   transition: background-color 0.2s;
 }
 
@@ -40,7 +40,7 @@ body {
 }
 
 .overview {
-  margin: 15px;
+  margin: 0px 10px;
 }
 
 .overview ul {
@@ -81,7 +81,8 @@ body {
 .button-container {
   display: flex;
   justify-content: start;
-  gap: 10px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .button-container button {
