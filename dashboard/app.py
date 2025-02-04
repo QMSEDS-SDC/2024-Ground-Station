@@ -66,21 +66,35 @@ def load_config(request):
 # Routes
 @app.route('/')
 def index():
-    vals = DEFAULT_AT_A_GLANCE_DATA
+    config = load_config(request)
+    values = DEFAULT_AT_A_GLANCE_DATA.copy()
 
-    vals["on_glance_comm_status"] = fetch_info.fetch_info() if "on_glance_comm_status" in request.form else None
-    vals["on_glance_cpu_usage"] = fetch_info.get_cpu_usage() if "on_glance_cpu_usage" in request.form else None
-    vals["on_glance_ram_usage"] = fetch_info.get_ram_usage() if "on_glance_ram_usage" in request.form else None
-    vals["on_glance_storage_usage"] = fetch_info.get_storage_usage() if "on_glance_storage_usage" in request.form else None
-    vals["on_glance_error_count"] = fetch_info.get_error_count() if "on_glance_error_count" in request.form else None
-    vals["on_glance_battery_stats"] = fetch_info.get_battery_stats() if "on_glance_battery_stats" in request.form else None
-    vals["on_glance_internal_temp"] = fetch_info.get_internal_temp() if "on_glance_internal_temp" in request.form else None
-    vals["on_glance_uptime"] = fetch_info.get_uptime() if "on_glance_uptime" in request.form else None
-    vals["on_glance_cpu_temp"] = fetch_info.get_cpu_temp() if "on_glance_cpu_temp" in request.form else None
-    vals["on_glance_aocs"] = fetch_info.get_aocs() if "on_glance_aocs" in request.form else None
-    vals["on_glance_camera_status"] = fetch_info.get_camera_status() if "on_glance_camera_status" in request.form else None
+    if config["on_glance_comm_status"]:
+        values["on_glance_comm_status"] = fetch_info.get_comm_status()
+    if config["on_glance_cpu_usage"]:
+        values["on_glance_cpu_usage"] = fetch_info.get_cpu_usage()
+    if config["on_glance_ram_usage"]:
+        values["on_glance_ram_usage"] = fetch_info.get_ram_usage()
+    if config["on_glance_storage_usage"]:
+        values["on_glance_storage_usage"] = fetch_info.get_storage_usage()
+    if config["on_glance_error_count"]:
+        values["on_glance_error_count"] = fetch_info.get_error_count()
+    if config["on_glance_battery_stats"]:
+        values["on_glance_battery_stats"] = fetch_info.get_battery_stats()
+    if config["on_glance_internal_temp"]:
+        values["on_glance_internal_temp"] = fetch_info.get_internal_temp()
+    if config["on_glance_uptime"]:
+        values["on_glance_uptime"] = fetch_info.get_uptime()
+    if config["on_glance_cpu_temp"]:
+        values["on_glance_cpu_temp"] = fetch_info.get_cpu_temp()
+    if config["on_glance_aocs"]:
+        values["on_glance_aocs"] = fetch_info.get_aocs()
+    if config["on_glance_camera_status"]:
+        values["on_glance_camera_status"] = fetch_info.get_camera_status()
 
-    return render_template('index.html', config=load_config(request), values=vals)
+    print(values)
+
+    return render_template('index.html', config=config, values=values)
 
 
 @app.route('/phase1')

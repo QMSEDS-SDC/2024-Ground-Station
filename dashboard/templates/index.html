@@ -26,33 +26,37 @@
             <button onclick="location.href='/config'">Config</button>
         </div>
     </div>
-
-    <div class="status">
+    <div class="status-head">
         <h2>At a Glance</h2>
+    </div>
+    <div class="status">
         <div class="status-container">
             <div class="row important">
                 {% if config.on_glance_uptime %}
                 <div class="status-item">
                     <h3>Uptime</h3>
-                    <p> {{ values.uptime }} </p>
+                    <p>{{ values.on_glance_uptime }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_comm_status %}
                 <div class="status-item">
                     <h3>Comms Status</h3>
+                    <p>{{ values.on_glance_comm_status }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_camera_status %}
                 <div class="status-item">
                     <h3>Camera Status</h3>
+                    <p>{{ values.on_glance_camera_status }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_error_count %}
                 <div class="status-item">
                     <h3>Error Count</h3>
+                    <p>{{ values.on_glance_error_count }}</p>
                 </div>
                 {% endif %}
             </div>
@@ -60,18 +64,21 @@
                 {% if config.on_glance_aocs %}
                 <div class="status-item">
                     <h3>AOCS Vals</h3>
+                    <p>{{ values.on_glance_aocs }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_battery_stats %}
                 <div class="status-item">
                     <h3>Battery Stats</h3>
+                    <p>{{ values.on_glance_battery_stats }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_internal_temp %}
                 <div class="status-item">
                     <h3>Internal Temp</h3>
+                    <p>{{ values.on_glance_internal_temp }}</p>
                 </div>
                 {% endif %}
             </div>
@@ -79,24 +86,28 @@
                 {% if config.on_glance_cpu_usage %}
                 <div class="status-item">
                     <h3>CPU Usage</h3>
+                    <p>{{ values.on_glance_cpu_usage }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_ram_usage %}
                 <div class="status-item">
                     <h3>Mem Usage</h3>
+                    <p>{{ values.on_glance_ram_usage }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_storage_usage %}
                 <div class="status-item">
                     <h3>Storage Usage</h3>
+                    <p>{{ values.on_glance_storage_usage }}</p>
                 </div>
                 {% endif %}
 
                 {% if config.on_glance_cpu_temp %}
                 <div class="status-item">
                     <h3>CPU Temperature</h3>
+                    <p>{{ values.on_glance_cpu_temp }}</p>
                 </div>
                 {% endif %}
             </div>

@@ -10,7 +10,7 @@ body {
   background-color: #333;
   color: #ddd;
   padding-left: 10px;
-  padding-bottom: 50px; /* Add padding to prevent footer from cutting off content */
+  padding-bottom: 50px;
 }
 
 footer {
@@ -125,10 +125,56 @@ footer a:hover {
   background: #555;
 }
 
+.status-head {
+  display: flex;
+  justify-content: start;
+  padding-left: 15px;
+}
+
 .status {
   display: flex;
   justify-content: start;
-  margin: 15px;
+  margin: 0 10px;
+}
+
+.status h2 {
+  margin: 10px;
+}
+
+.status-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.status-item {
+  background-color: #444;
+  padding: 15px;
+  border-radius: 10px;
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.status-item h3 {
+  margin: 0 0 10px 0;
+  color: #fff;
+}
+
+.status-item p {
+  margin: 0;
+  color: #ddd;
+}
+
+.status-item:hover {
+  background-color: #555;
 }
 
 /* General styles for the config page */
