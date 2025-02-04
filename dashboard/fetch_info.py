@@ -100,7 +100,7 @@ def get_battery_stats() -> Dict[str, int]:
     return battery_dict
 
 
-def get_internal_temp() > int:
+def get_internal_temp() -> int:
     """
     Fetches the internal temperature of the SBC.
 
