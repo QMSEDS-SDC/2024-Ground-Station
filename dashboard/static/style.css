@@ -125,6 +125,7 @@ footer a:hover {
   background: #555;
 }
 
+/* Styles for the At a Glance section */
 .status-head {
   display: flex;
   justify-content: start;
@@ -144,12 +145,16 @@ footer a:hover {
 .status-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
 }
 
 .row {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
   gap: 20px;
 }
 
@@ -157,10 +162,12 @@ footer a:hover {
   background-color: #444;
   padding: 15px;
   border-radius: 10px;
-  flex: 1;
-  min-width: 200px;
+  flex: 1 1 200px;
+  min-width: 250px;
   text-align: center;
   transition: background-color 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .status-item h3 {

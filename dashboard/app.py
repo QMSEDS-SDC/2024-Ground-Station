@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, make_response, flash, \
     get_flashed_messages
 import json
+import datetime
 import fetch_info
 
 # Init
@@ -84,7 +85,8 @@ def index():
     if config["on_glance_internal_temp"]:
         values["on_glance_internal_temp"] = fetch_info.get_internal_temp()
     if config["on_glance_uptime"]:
-        values["on_glance_uptime"] = fetch_info.get_uptime()
+        seconds = fetch_info.get_uptime()
+        values["on_glance_uptime"] = datetime.timedelta(seconds=seconds)
     if config["on_glance_cpu_temp"]:
         values["on_glance_cpu_temp"] = fetch_info.get_cpu_temp()
     if config["on_glance_aocs"]:
