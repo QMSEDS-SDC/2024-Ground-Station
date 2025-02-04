@@ -10,6 +10,22 @@ app = Flask(__name__)
 app.secret_key = "dev"  # temporary secret key
 
 
+# At a Glance Data
+
+DEFAULT_AT_A_GLANCE_DATA = {
+    "on_glance_comm_status": None,
+    "on_glance_cpu_usage": None,
+    "on_glance_ram_usage": None,
+    "on_glance_storage_usage": None,
+    "on_glance_error_count": None,
+    "on_glance_battery_stats": None,
+    "on_glance_internal_temp": None,
+    "on_glance_uptime": None,
+    "on_glance_cpu_temp": None,
+    "on_glance_aocs": None,
+    "on_glance_camera_status": None,
+}
+
 # Config stuff
 
 DEFAULT_CONFIG = {
@@ -50,7 +66,21 @@ def load_config(request):
 # Routes
 @app.route('/')
 def index():
-    return render_template('index.html', config=load_config(request))
+    vals = DEFAULT_AT_A_GLANCE_DATA
+
+    vals["on_glance_comm_status"] = fetch_info.fetch_info() if "on_glance_comm_status" in request.form else None
+    vals["on_glance_cpu_usage"] = fetch_info.get_cpu_usage() if "on_glance_cpu_usage" in request.form else None
+    vals["on_glance_ram_usage"] = fetch_info.get_ram_usage() if "on_glance_ram_usage" in request.form else None
+    vals["on_glance_storage_usage"] = fetch_info.get_storage_usage() if "on_glance_storage_usage" in request.form else None
+    vals["on_glance_error_count"] = fetch_info.get_error_count() if "on_glance_error_count" in request.form else None
+    vals["on_glance_battery_stats"] = fetch_info.get_battery_stats() if "on_glance_battery_stats" in request.form else None
+    vals["on_glance_internal_temp"] = fetch_info.get_internal_temp() if "on_glance_internal_temp" in request.form else None
+    vals["on_glance_uptime"] = fetch_info.get_uptime() if "on_glance_uptime" in request.form else None
+    vals["on_glance_cpu_temp"] = fetch_info.get_cpu_temp() if "on_glance_cpu_temp" in request.form else None
+    vals["on_glance_aocs"] = fetch_info.get_aocs() if "on_glance_aocs" in request.form else None
+    vals["on_glance_camera_status"] = fetch_info.get_camera_status() if "on_glance_camera_status" in request.form else None
+
+    return render_template('index.html', config=load_config(request), values=vals)
 
 
 @app.route('/phase1')
