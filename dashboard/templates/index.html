@@ -30,13 +30,75 @@
     <div class="status">
         <h2>At a Glance</h2>
         <div class="status-container">
-            <div class="row">
-                <div class="col"></div>
-                <div class="col"></div>
+            <div class="row important">
+                {% if config.on_glance_uptime %}
+                <div class="status-item">
+                    <h3>Uptime</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_comm_status %}
+                <div class="status-item">
+                    <h3>Comms Status</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_camera_status %}
+                <div class="status-item">
+                    <h3>Camera Status</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_error_count %}
+                <div class="status-item">
+                    <h3>Error Count</h3>
+                </div>
+                {% endif %}
             </div>
-            <div class="row"></div>
-            <div class="row"></div>
-            <div class="row"></div>
+            <div class="row sat-metrics">
+                {% if config.on_glance_aocs %}
+                <div class="status-item">
+                    <h3>AOCS Vals</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_battery_stats %}
+                <div class="status-item">
+                    <h3>Battery Stats</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_internal_temp %}
+                <div class="status-item">
+                    <h3>Internal Temp</h3>
+                </div>
+                {% endif %}
+            </div>
+            <div class="row sbc-metrics">
+                {% if config.on_glance_cpu_usage %}
+                <div class="status-item">
+                    <h3>CPU Usage</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_ram_usage %}
+                <div class="status-item">
+                    <h3>Mem Usage</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_storage_usage %}
+                <div class="status-item">
+                    <h3>Storage Usage</h3>
+                </div>
+                {% endif %}
+
+                {% if config.on_glance_cpu_temp %}
+                <div class="status-item">
+                    <h3>CPU Temperature</h3>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </body>
