@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, make_response, flash, \
-    get_flashed_messages
+from flask import Flask, render_template, request, redirect, url_for, make_response, flash, get_flashed_messages
 import json
 import datetime
 import fetch_info
