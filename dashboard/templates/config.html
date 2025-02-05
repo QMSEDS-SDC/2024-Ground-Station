@@ -32,6 +32,10 @@
             <div id="AtAGlance" class="tabcontent active">
                 <form id="at_a_glance_form" action="/config" method="POST">
                     <input type="hidden" name="form_id" value="at_a_glance_form">
+                    <label for="refresh_time">1. How often should the data refresh? (in seconds) :
+                        <input id="refresh_time" name="refresh_time" type="number" required min="0" value="{{ config.refresh_time }}"/>
+                    </label>
+                    <br>
                     <label for="comm_status">1. Display Comm Status? :
                         <input id="comm_status" name="on_glance_comm_status" type="checkbox" {% if config.on_glance_comm_status %} checked {% endif %} />
                     </label>

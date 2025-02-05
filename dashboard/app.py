@@ -30,6 +30,7 @@ DEFAULT_AT_A_GLANCE_DATA = {
 # Config stuff
 
 DEFAULT_CONFIG = {
+    "refresh_time": 15,
     "on_glance_comm_status": True,
     "on_glance_cpu_usage": True,
     "on_glance_ram_usage": True,
@@ -94,8 +95,6 @@ def index():
     if config["on_glance_camera_status"]:
         values["on_glance_camera_status"] = fetch_info.get_camera_status()
 
-    print(values)
-
     return render_template('index.html', config=config, values=values)
 
 
@@ -128,6 +127,7 @@ def config():
         form_id = request.form.get("form_id")
 
         if form_id == "at_a_glance_form":
+            config_data["refresh_time"] = int(request.form.get("refresh_time"))
             config_data["on_glance_comm_status"] = "on_glance_comm_status" in request.form
             config_data["on_glance_cpu_usage"] = "on_glance_cpu_usage" in request.form
             config_data["on_glance_ram_usage"] = "on_glance_ram_usage" in request.form
@@ -152,7 +152,11 @@ def config():
             config_data["enable_cam_livestream"] = "enable_cam_livestream" in request.form
             config_data["enable_manual_control"] = "enable_manual_control" in request.form
 
-        flash("Config updated successfully!")
+        if "enable_light_mode" in request.form:
+            flash("Dark Mode is the only thing you need! You plebs! >:(    [Everything else is updated successfully!]")
+            config_data["enable_light_mode"] = False
+        else:
+            flash("Config updated successfully!", "error")
         response = make_response(redirect(url_for('config', message=message)))
         update_config(response, config_data)
         return response
