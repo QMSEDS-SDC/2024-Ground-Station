@@ -64,6 +64,11 @@ def load_config(request):
         return DEFAULT_CONFIG  # enter default config
 
 
+# 404 Route
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 # Routes
 @app.route('/')
 def index():

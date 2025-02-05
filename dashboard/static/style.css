@@ -65,7 +65,7 @@ footer a:hover {
 }
 
 .overview {
-  margin: 0px 10px;
+  margin: 0px 18px;
 }
 
 .overview ul {
@@ -129,13 +129,13 @@ footer a:hover {
 .status-head {
   display: flex;
   justify-content: start;
-  padding-left: 15px;
+  margin: 0px 18px;
 }
 
 .status {
   display: flex;
   justify-content: start;
-  margin: 0 10px;
+  margin: 0 18px;
 }
 
 .status h2 {
