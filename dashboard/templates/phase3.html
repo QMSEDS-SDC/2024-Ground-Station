@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>QMStarlight</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='index_script.js') }}"></script>
+</head>
+<body>
+    <div class="header">
+        <button onclick="location.href='/'" class="header-button">
+            <h1>Dashboard - Phase 3</h1>
+        </button>
+    </div>
+</body>
+<footer>
+    {% if config.credit_dev %}
+    <p>By <a href="https://github.com/ayashrath" target="_blank">Ayash Rath</a>, Software Member of the <a href="https://www.qmsu.org/groups/25974/" target="_blank">QMSEDS Society</a> (Queen Mary Univeristy of London)</p>
+    {% else %}
+    <p>By the Software Members of the <a href="https://www.qmsu.org/groups/25974/" target="_blank">QMSEDS Society</a> (Queen Mary Univeristy of London)</p>
+    {% endif %}
+</footer>
+</html>
