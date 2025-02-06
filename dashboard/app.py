@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response, flash, get_flashed_messages, \
-    jsonify, session
+    jsonify
 import json
 import datetime
 import fetch_info
@@ -74,6 +74,7 @@ def load_config(request):
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
 # Routes
 @app.route('/fetch_info')
 def get_info():
@@ -92,6 +93,7 @@ def get_info():
         'on_glance_cpu_temp': fetch_info.get_cpu_temp()
     }
     return jsonify(data)
+
 
 @app.route('/')
 def index():
