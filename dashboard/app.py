@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response, flash, get_flashed_messages
+from flask import Flask, render_template, request, redirect, url_for, make_response, flash, get_flashed_messages, \
+    jsonify, session
 import json
 import datetime
 import fetch_info
@@ -12,6 +13,7 @@ app.secret_key = "dev"  # temporary secret key
 
 # At a Glance Data
 
+init_cookie_set = False
 DEFAULT_AT_A_GLANCE_DATA = {
     "on_glance_comm_status": None,
     "on_glance_cpu_usage": None,
@@ -29,7 +31,7 @@ DEFAULT_AT_A_GLANCE_DATA = {
 # Config stuff
 
 DEFAULT_CONFIG = {
-    "refresh_time": 15,
+    "refresh_time": 5,
     "on_glance_comm_status": True,
     "on_glance_cpu_usage": True,
     "on_glance_ram_usage": True,
@@ -57,10 +59,13 @@ def update_config(response, config):
 
 
 def load_config(request):
+    global init_cookie_set
+
     config_json = request.cookies.get('config')
     if config_json is not None:
         return json.loads(config_json)
     else:
+        init_cookie_set = False
         return DEFAULT_CONFIG  # enter default config
 
 
@@ -70,9 +75,34 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 # Routes
+@app.route('/fetch_info')
+def get_info():
+    # Fetch the required information
+    data = {
+        'on_glance_uptime': fetch_info.get_uptime(),
+        'on_glance_comm_status': fetch_info.get_comm_status(),
+        'on_glance_camera_status': fetch_info.get_camera_status(),
+        'on_glance_error_count': fetch_info.get_error_count(),
+        'on_glance_aocs': fetch_info.get_aocs(),
+        'on_glance_battery_stats': fetch_info.get_battery_stats(),
+        'on_glance_internal_temp': fetch_info.get_internal_temp(),
+        'on_glance_cpu_usage': fetch_info.get_cpu_usage(),
+        'on_glance_ram_usage': fetch_info.get_ram_usage(),
+        'on_glance_storage_usage': fetch_info.get_storage_usage(),
+        'on_glance_cpu_temp': fetch_info.get_cpu_temp()
+    }
+    return jsonify(data)
+
 @app.route('/')
 def index():
+    global init_cookie_set
     config = load_config(request)
+    if config == DEFAULT_CONFIG and not init_cookie_set:
+        response = make_response(redirect(url_for('index')))
+        update_config(response, config)
+        init_cookie_set = True
+        return response
+
     values = DEFAULT_AT_A_GLANCE_DATA.copy()
 
     if config["on_glance_comm_status"]:
@@ -125,6 +155,8 @@ def log():
 @app.route('/config', methods=['GET', 'POST'])
 def config():
     config_data = load_config(request)
+    if config == DEFAULT_CONFIG:
+        update_config(make_response(redirect(url_for('config'))), config)
     message = None
 
     if request.method == "POST":

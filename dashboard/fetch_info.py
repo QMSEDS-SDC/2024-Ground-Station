@@ -3,6 +3,7 @@ Has functions which aid in fetching information needed for the dashboard from th
 """
 
 from typing import Dict
+import random
 
 
 def get_comm_status() -> bool:
@@ -13,7 +14,7 @@ def get_comm_status() -> bool:
         - The communication status of the SBC. True if the communication is active, False otherwise.
     """
 
-    status = True
+    status = random.choice([True, False])
     return status
 
 
@@ -25,7 +26,7 @@ def get_cpu_usage() -> int:
         - The CPU usage of the SBC in percentage.
     """
 
-    percent = 25
+    percent = random.randint(25, 100)
 
     if percent >= 100 or percent <= 0:
         return None
@@ -41,7 +42,7 @@ def get_ram_usage() -> int:
         - The RAM usage of the SBC in percentage.
     """
 
-    percent = 25
+    percent = random.randint(15, 100)
 
     if percent > 100 or percent < 0:
         return None
@@ -57,7 +58,7 @@ def get_storage_usage() -> int:
         - The storage usage of the SBC in percentage.
     """
 
-    percent = 75
+    percent = random.randint(40, 100)
 
     if percent > 100 or percent < 0:
         return None
@@ -76,8 +77,8 @@ def get_error_count() -> Dict[str, int]:
     """
 
     count_dict = {
-        "error": 0,
-        "warning": 0,
+        "error": random.randint(0, 5),
+        "warning": random.randint(0, 5),
     }
 
     return count_dict
@@ -92,9 +93,9 @@ def get_battery_stats() -> Dict[str, int]:
     """
 
     battery_dict = {
-        "percentage": 100,
-        "voltage": 12,
-        "current": 1,
+        "percentage": random.randint(0, 100),
+        "voltage": random.randint(0, 12),
+        "current": round(random.random() * 4, 2),
     }
 
     return battery_dict
@@ -108,7 +109,7 @@ def get_internal_temp() -> int:
         The internal temperature of the SBC in Celsius.
     """
 
-    temp = 40
+    temp = 25 + random.randint(0, 20)
 
     return temp
 
@@ -121,7 +122,7 @@ def get_uptime() -> int:
         str: The uptime of the SBC in seconds.
     """
 
-    uptime = 1000
+    uptime = random.randint(0, 1000000)
 
     return uptime
 
@@ -134,7 +135,7 @@ def get_cpu_temp() -> int:
         str: The CPU temperature of the SBC in Celsius.
     """
 
-    cpu_temp = 50
+    cpu_temp = 50 + random.randint(0, 20)
 
     return cpu_temp
 
@@ -153,11 +154,11 @@ def get_aocs() -> Dict[str, int]:
     """
 
     aocs_dict = {
-        "x": 0,
-        "y": 0,
-        "z": 0,
-        "rpm": 0,
-        "mock sun sensor": True,
+        "x": random.randint(-180, 180),
+        "y": random.randint(-180, 180),
+        "z": random.randint(-180, 180),
+        "rpm": random.randint(0, 1000),
+        "mock sun sensor": random.choice([True, False]),
     }
 
     return aocs_dict
@@ -171,6 +172,6 @@ def get_camera_status() -> bool:
         The camera status of the SBC in boolean. True if the camera is active, False otherwise.
     """
 
-    status = True
+    status = random.choice([True, False])
 
     return status
