@@ -11,11 +11,16 @@ def get_comm_status() -> bool:
     Fetches the communication status of the SBC.
 
     Returns:
-        - The communication status of the SBC. True if the communication is active, False otherwise.
+        dict: A dictionary containing:
+            - time (int): Time when it was last checked (for now lets not care but should be UNIX timestamp)
+            - status (bool): A random boolean value indicating the communication status. True means ok
+
     """
 
+    time = random.randint(1739083186, 1739083186 + 3600 * 24 * 7)
     status = random.choice([True, False])
-    return status
+
+    return {"time": time, "status": status}
 
 
 def get_cpu_usage() -> int:
@@ -96,6 +101,7 @@ def get_battery_stats() -> Dict[str, int]:
         "percentage": random.randint(0, 100),
         "voltage": random.randint(0, 12),
         "current": round(random.random() * 4, 2),
+        "temp": random.randint(0, 40),
     }
 
     return battery_dict
@@ -154,14 +160,39 @@ def get_aocs() -> Dict[str, int]:
     """
 
     aocs_dict = {
-        "x": random.randint(-180, 180),
-        "y": random.randint(-180, 180),
-        "z": random.randint(-180, 180),
+        "x_ang_rate": random.randint(-180, 180),
+        "y_ang_rate": random.randint(-180, 180),
+        "z_ang_rate": random.randint(-180, 180),
+        "x_pos": random.randint(-180, 180),
+        "y_pos": random.randint(-180, 180),
+        "z_pos": random.randint(-180, 180),
         "rpm": random.randint(0, 1000),
         "mock_sun_sensor": random.choice([True, False]),
     }
 
     return aocs_dict
+
+
+def get_comms_data() -> Dict[str, int]:
+    """
+    Fetches the communication data of the SBC.
+
+    Returns:
+        The communication data of the SBC in a dictionary with the following keys
+        - uplink: The uplink data of the SBC.
+        - downlink: The downlink data of the SBC.
+        - signal_strength: The signal strength of the SBC.
+        - data_rate: The data rate of the SBC.
+    """
+
+    comms_dict = {
+        "uplink": random.randint(0, 100),
+        "downlink": random.randint(0, 100),
+        "signal_strength": random.randint(0, 100),
+        "data_rate": random.randint(0, 100),
+    }
+
+    return comms_dict
 
 
 def get_camera_status() -> bool:

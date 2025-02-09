@@ -42,8 +42,9 @@
                 {% if config.on_glance_comm_status %}
                 <div class="status-item">
                     <h3>Communication System Status</h3>
+                    <p>Last time checked: {{ values.on_glance_comm_status.time }}</p>
                     <p>
-                        {% if values.on_glance_comm_status %}
+                        {% if values.on_glance_comm_status.status %}
                         Operational
                         {% else %}
                         Not Operational
@@ -77,7 +78,8 @@
                 {% if config.on_glance_aocs %}
                 <div class="status-item">
                     <h3>AOCS Stats</h3>
-                    <p>Position Angle: ({{ values.on_glance_aocs.x }}, {{ values.on_glance_aocs.y }}, {{ values.on_glance_aocs.z }}) </p>
+                    <p>Orientation: ({{ values.on_glance_aocs.x_pos }}, {{ values.on_glance_aocs.y_pos }}, {{ values.on_glance_aocs.z_pos }}) </p>
+                    <p>Angle Change: ({{ values.on_glance_aocs.x_ang_rate }}, {{ values.on_glance_aocs.y_ang_rate }}, {{ values.on_glance_aocs.z_ang_rate }}) </p>
                     <p>RPM: {{ values.on_glance_aocs.rpm }} rpm</p>
                     <p>Mock Sun: 
                         {% if values.on_glance_aocs.mock_sun_sensor %}
@@ -94,6 +96,7 @@
                     <p>Charge: {{ values.on_glance_battery_stats.percentage }}%</p>
                     <p>Voltage: {{ values.on_glance_battery_stats.voltage }}V</p>
                     <p>Current: {{ values.on_glance_battery_stats.current }}A</p>
+                    <p>Temperature: {{ values.on_glance_battery_stats.temp }}A</p>
                 </div>
                 {% endif %}
 

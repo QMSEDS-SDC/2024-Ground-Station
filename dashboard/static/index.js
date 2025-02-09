@@ -9,20 +9,23 @@ async function fetchInfo() {
             if (h3.includes("Uptime")) {
                 item.querySelector('p').textContent = data.on_glance_uptime + ' (hr:min:sec)';
             } else if (h3.includes("Communication System Status")) {
-                item.querySelector('p').textContent = data.on_glance_comm_status ? 'Operational' : 'Not Operational';
+                item.querySelector('p').textContent = 'Last time checked: ' + data.on_glance_comm_status.time;
+                item.querySelector('p + p').textContent = data.on_glance_comm_status.status ? 'Operational' : 'Not Operational';
             } else if (h3.includes("Camera Status")) {
                 item.querySelector('p').textContent = data.on_glance_camera_status ? 'Operational' : 'Not Operational';
             } else if (h3.includes("Error Count")) {
                 item.querySelector('p').textContent = 'Errors: ' + data.on_glance_error_count.error;
                 item.querySelector('p + p').textContent = 'Warnings: ' + data.on_glance_error_count.warning;
             } else if (h3.includes("AOCS Stats")) {
-                item.querySelector('p').textContent = 'Position Angle: (' + data.on_glance_aocs.x + ', ' + data.on_glance_aocs.y + ', ' + data.on_glance_aocs.z + ')';
-                item.querySelector('p + p').textContent = 'RPM: ' + data.on_glance_aocs.rpm + ' rpm';
-                item.querySelector('p + p + p').textContent = data.on_glance_aocs ? 'Operational' : 'Not Operational';
+                item.querySelector('p').textContent = 'Orientation: (' + data.on_glance_aocs.x_pos + ', ' + data.on_glance_aocs.y_pos + ', ' + data.on_glance_aocs.z_pos + ')';
+                item.querySelector('p + p').textContent = 'Angle Change: (' + data.on_glance_aocs.x_ang_rate + ', ' + data.on_glance_aocs.y_ang_rate + ', ' + data.on_glance_aocs.z_ang_rate + ')';
+                item.querySelector('p + p + p').textContent = 'RPM: ' + data.on_glance_aocs.rpm + ' rpm';
+                item.querySelector('p + p + p + p').textContent = data.on_glance_aocs ? 'Operational' : 'Not Operational';
             } else if (h3.includes("Battery Stats")) {
                 item.querySelector('p').textContent = 'Charge: ' + data.on_glance_battery_stats.percentage + '%';
                 item.querySelector('p + p').textContent = 'Voltage: ' + data.on_glance_battery_stats.voltage + 'V';
                 item.querySelector('p + p + p').textContent = 'Current: ' + data.on_glance_battery_stats.current + 'A';
+                item.querySelector('p + p + p + p').textContent = 'Temperature: ' + data.on_glance_battery_stats.temp + '°C';
             } else if (h3.includes("Internal Temperature")) {
                 item.querySelector('p').textContent = data.on_glance_internal_temp + '°C';
             } else if (h3.includes("CPU Usage")) {

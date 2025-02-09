@@ -139,33 +139,37 @@ def phase1():
     aocs_vals = fetch_info.get_aocs()
     battery_vals = fetch_info.get_battery_stats()
     current_time = datetime.datetime.now()
+    comms_vals = fetch_info.get_comms_data()
+    comms_status = fetch_info.get_comm_status()
 
     health_check_values = {
         "data_current": current_time.strftime("%d-%m-%Y"),
         "time_current": current_time.strftime("%H:%M"),
         "battery_voltage": battery_vals["voltage"],
         "battery_amps": battery_vals["current"],
-        "battery_temp": 0,  # Not implemented
+        "battery_temp": battery_vals["temp"],
         "internal_temp": fetch_info.get_internal_temp(),
-        "downlink_freq": 0,  # Not implemented
-        "uplink_freq": 0,  # Not implemented
-        "signal_strength": 0,  # Not implemented
-        "data_transmission_rate": 0,  # Not implemented
-        "gyro": (aocs_vals["x"], aocs_vals["y"], aocs_vals["z"]),
-        "orientation": (0.0, 0.0, 0.0),  # Not implemented
+        "downlink_freq": comms_vals["downlink"],
+        "uplink_freq": comms_vals["uplink"],
+        "signal_strength": comms_vals["signal_strength"],
+        "data_transmission_rate": comms_vals["data_rate"],
+        "gyro": (aocs_vals["x_ang_rate"], aocs_vals["y_ang_rate"], aocs_vals["z_ang_rate"]),
+        "orientation": (aocs_vals["x_pos"], aocs_vals["y_pos"], aocs_vals["z_pos"]),
         "mock_sun_status": aocs_vals["mock_sun_sensor"],
         "reaction_rpm": aocs_vals["rpm"],
         "camera_status": fetch_info.get_camera_status(),
         "memory_usage": fetch_info.get_ram_usage(),
-        "last_comm_date_time": "",  # Not implemented
-        "uptime": fetch_info.get_uptime()/60,
+        "last_comm_date_time": comms_status["time"],
+        "uptime": round(fetch_info.get_uptime()/60, 2),
         "error_count": fetch_info.get_error_count(),
     }
 
     # Not implemented
     health_check_values["battery_status"] = "OK" if health_check_values["battery_voltage"] > 0 else "NOT OK"
     health_check_values["temperature_status"] = "OK" if health_check_values["internal_temp"] < 50 else "NOT OK"
-    health_check_values["comm_status"] = "OK" if health_check_values["signal_strength"] > 0 else "NOT OK"
+
+    health_check_values["comm_status"] = comms_status["status"]
+
     health_check_values["aocs_status"] = "OK" if health_check_values["gyro"] != (0, 0, 0) else "NOT OK"
     health_check_values["payload_status"] = "OK" if health_check_values["camera_status"] == "ON" else "NOT OK"
     health_check_values["command_status"] = "OK" if health_check_values["last_comm_date_time"] != "NOT IMPLEMENTED" else "NOT OK"
