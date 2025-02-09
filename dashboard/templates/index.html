@@ -80,7 +80,7 @@
                     <p>Position Angle: ({{ values.on_glance_aocs.x }}, {{ values.on_glance_aocs.y }}, {{ values.on_glance_aocs.z }}) </p>
                     <p>RPM: {{ values.on_glance_aocs.rpm }} rpm</p>
                     <p>Mock Sun: 
-                        {% if values.on_glance_aocs %}
+                        {% if values.on_glance_aocs.mock_sun_sensor %}
                         Operational
                         {% else %}
                         Not Operational

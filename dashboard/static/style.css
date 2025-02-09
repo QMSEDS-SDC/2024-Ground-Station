@@ -301,3 +301,13 @@ footer a:hover {
 .banner button:hover {
   color: #000000;
 }
+
+
+/* Styles for the Phase 1 section */
+.phase1-section {
+  margin-left: 20px;
+}
+
+.phase1-section h2{
+  text-decoration: underline;
+}

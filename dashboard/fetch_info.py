@@ -158,7 +158,7 @@ def get_aocs() -> Dict[str, int]:
         "y": random.randint(-180, 180),
         "z": random.randint(-180, 180),
         "rpm": random.randint(0, 1000),
-        "mock sun sensor": random.choice([True, False]),
+        "mock_sun_sensor": random.choice([True, False]),
     }
 
     return aocs_dict
