@@ -6,6 +6,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>QMStarlight</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='phase1.js') }}"></script>
 </head>
 <body>
     <div class="header">
@@ -23,22 +24,15 @@
             <li><strong>Battery Voltage:</strong> {{ values.battery_voltage }} V (NOMINAL)</li>
             <li><strong>Battery Current:</strong> {{ values.battery_amps }} A (NOMINAL)</li>
             <li><strong>Battery Temperature:</strong> {{ values.battery_temp }} °C (NOMINAL)</li>
-            {% if values.battery_status %}
-                <li><strong>Status:</strong> OK</li>
-            {% else %}
-                <li><strong>Status:</strong> NOT OK</li>
-            {% endif %}
+            <li><strong>Status:</strong> {{ values.battery_status }}</li>
         </ul>
     </div>
     <div class="phase1-section">
         <h2>Thermal Subsystem</h2>
         <ul>
             <li><strong>Internal Temperature:</strong> {{ values.internal_temp }} °C</li>
-            {% if values.temperature_status %}
-                <li><strong>Status:</strong> OK</li>
-            {% else %}
-                <li><strong>Status:</strong> NOT OK</li>
-            {% endif %}
+            <li><strong>Status:</strong> {{ values.temperature_status }}</li>
+
         </ul>
     </div>
     <div class="phase1-section">
@@ -47,12 +41,8 @@
             <li><strong>Downlink Frequency:</strong> {{ values.downlink_freq }} MHz (NOMINAL)</li>
             <li><strong>Uplink Frequency:</strong> {{ values.uplink_freq }} MHz (NOMINAL)</li>
             <li><strong>Signal Strength:</strong> {{ values.signal_strength }} dBm (NOMINAL)</li>
-            <li><strong>Data Trasmission Rate:</strong> {{ data_transmission_rate }} dBm (NOMINAL)</li>
-            {% if values.comm_status %}
-                <li><strong>Status:</strong> OK</li>
-            {% else %}
-                <li><strong>Status:</strong> NOT OK</li>
-            {% endif %}
+            <li><strong>Data Trasmission Rate:</strong> {{ values.transmission_rate }} dBm (NOMINAL)</li>
+            <li><strong>Status:</strong> {{ values.comm_status }}</li>
         </ul>
     </div>
     <div class="phase1-section">
@@ -60,69 +50,43 @@
         <ul>
             <li><strong>Gyroscope:</strong> X: {{ values.gyro[0] }} °/s, Y: {{ values.gyro[1] }} °/s, Z: {{ values.gyro[2] }} °/s</li>
             <li><strong>Orientation:</strong> X: {{ values.orientation[0] }} °, Y: {{ values.orientation[1] }} °, Z: {{ values.orientation[2] }} °</li>
-            <li><strong>Mock Sun Sensor:</strong> ACTIVE</li>
+            <li><strong>Mock Sun Sensor:</strong> {{ values.mock_sun_status }}</li>
             <li><strong>Reaction Wheel RPM:</strong> {{ values.reaction_rpm }}</li>
-            {% if values.aocs_status %}
-                <li><strong>Status:</strong> OK</li>
-            {% else %}
-                <li><strong>Status:</strong> NOT OK</li>
-            {% endif %}
+            <li><strong>Status:</strong> {{ values.aocs_status }}</li>
         </ul>
     </div>
     <div class="phase1-section">
         <h2>Payload Subsystem</h2>
         <ul>
-            {% if values.camera_status %}
-                <li><strong>Camera:</strong> OPERATIONAL</li>
-            {% else %}
-                <li><strong>Camera:</strong> NOT OPERATIONAL</li>
-            {% endif %}
-            {% if values.payload_status %}
-                <li><strong>Status:</strong> OK</li>
-            {% else %}
-                <li><strong>Status:</strong> NOT OK</li>
-            {% endif %}
+            <li><strong>Camera:</strong> {{ values.camera_status }}</li>
+            <li><strong>Status:</strong> {{ values.payload_status }}</li>
+
         </ul>
     </div>
     <div class="phase1-section">
         <h2>Command and Data Handling Subsystem</h2>
         <ul>
             <li><strong>Memory Usage:</strong> {{ values.memory_usage }}%</li>
-            <li><strong>Last Command Received:</strong> {{ values.last_comm_date_time }} GMT</li>
+            <li><strong>Last Command Received:</strong> {{ values.last_comm_date }} GMT</li>
             <li><strong>Uptime:</strong> {{ values.uptime }} mins</li>
-            {% if values.command_status %}
-                <li><strong>Status:</strong> OK</li>
-            {% else %}
-                <li><strong>Status:</strong> NOT OK</li>
-            {% endif %}
+            <li><strong>Status:</strong> {{ values.system_status }}</li>
+
         </ul>
     </div>
     <div class="phase1-section">
         <h2>Error Log</h2>
         <ul>
-            {% if values.error_log %}
-                <li><strong>No critical errors detected.</strong></li>
-            {% else %}
-                <li><strong>Critical errors detected, check log for details.</strong></li>
-            {% endif %}
+            <li><strong>{{ values.error_log }}</strong></li>
         </ul>
     </div>
     <div class="phase1-section">
         <h2>Overall Status</h2>
         <ul>
-            {% if values.overall_status %}
-                <li><strong>No anomalies detected.</strong></li>
-            {% else %}
-                <li><strong>Abnormalities detected</li>
-            {% endif %}
-            {% if values.recommended_action %}
-                <li><strong>Recommended Actions:</strong> Continue standard operations.</li>
-            {% else %}
-                <li><strong>Recommended Actions:</strong> Solve the issues stated in error log, and rerun the health check.</li>
-            {% endif %}
+            <li><strong>{{ values.overall_status }}</strong></li>
+            <li><strong>Recommended Actions:</strong> {{ values.recommended_action }}</li>
         </ul>
     </div>
-
+    <button id="save-report-button">Save Report</button>
 </body>
 <footer>
     {% if config.credit_dev %}

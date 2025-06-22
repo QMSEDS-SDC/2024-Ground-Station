@@ -160,12 +160,12 @@ def get_aocs() -> Dict[str, int]:
     """
 
     aocs_dict = {
-        "x_ang_rate": random.randint(-180, 180),
-        "y_ang_rate": random.randint(-180, 180),
-        "z_ang_rate": random.randint(-180, 180),
-        "x_pos": random.randint(-180, 180),
-        "y_pos": random.randint(-180, 180),
-        "z_pos": random.randint(-180, 180),
+        "x_ang_rate": random.randint(0, 360),
+        "y_ang_rate": random.randint(0, 360),
+        "z_ang_rate": random.randint(0, 360),
+        "x_pos": random.randint(0, 360),
+        "y_pos": random.randint(0, 360),
+        "z_pos": random.randint(0, 360),
         "rpm": random.randint(0, 1000),
         "mock_sun_sensor": random.choice([True, False]),
     }

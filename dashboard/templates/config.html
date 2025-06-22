@@ -25,6 +25,7 @@
         <div class="config-container">
             <div class="tab">
                 <button class="tablinks active" onclick="openTab(event, 'AtAGlance')">At a Glance</button>
+                <button class="tablinks" onclick="openTab(event, 'HealthCheckThreshold')">Health Check Thresholds</button>
                 <button class="tablinks" onclick="openTab(event, 'GlobalAppearance')">Global Appearances</button>
                 <button class="tablinks" onclick="openTab(event, 'GlobalPractical')">Advanced Options</button>
             </div>
@@ -36,48 +37,120 @@
                         <input id="refresh_time" name="refresh_time" type="number" required min="0" value="{{ config.refresh_time }}"/>
                     </label>
                     <br>
-                    <label for="comm_status">1. Display Comm Status? :
+                    <label for="comm_status">2. Display Comm Status? :
                         <input id="comm_status" name="on_glance_comm_status" type="checkbox" {% if config.on_glance_comm_status %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="cpu_usage">2. Display CPU Usage? :
+                    <label for="cpu_usage">3. Display CPU Usage? :
                         <input id="cpu_usage" name="on_glance_cpu_usage" type="checkbox" {% if config.on_glance_cpu_usage %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="ram_usage">3. Display RAM Usage? :
+                    <label for="ram_usage">4. Display RAM Usage? :
                         <input id="ram_usage" name="on_glance_ram_usage" type="checkbox" {% if config.on_glance_ram_usage %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="storage_usage">4. Display Storage Usage? :
+                    <label for="storage_usage">5. Display Storage Usage? :
                         <input id="storage_usage" name="on_glance_storage_usage" type="checkbox" {% if config.on_glance_storage_usage %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="error_count">5. Display Error Count? :
+                    <label for="error_count">6. Display Error Count? :
                         <input id="error_count" name="on_glance_error_count" type="checkbox" {% if config.on_glance_error_count %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="battery_stats">6. Display Battery Stats? :
+                    <label for="battery_stats">7. Display Battery Stats? :
                         <input id="battery_stats" name="on_glance_battery_stats" type="checkbox" {% if config.on_glance_battery_stats %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="internal_temp">7. Display Internal Temperature? :
+                    <label for="internal_temp">8. Display Internal Temperature? :
                         <input id="internal_temp" name="on_glance_internal_temp" type="checkbox" {% if config.on_glance_internal_temp %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="uptime">8. Display Uptime? :
+                    <label for="uptime">9. Display Uptime? :
                         <input id="uptime" name="on_glance_uptime" type="checkbox" {% if config.on_glance_uptime %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="cpu_temp">9. Display CPU Temperature? :
+                    <label for="cpu_temp">10. Display CPU Temperature? :
                         <input id="cpu_temp" name="on_glance_cpu_temp" type="checkbox" {% if config.on_glance_cpu_temp %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="aocs">10. Display AOCS? :
+                    <label for="aocs">11. Display AOCS? :
                         <input id="aocs" name="on_glance_aocs" type="checkbox" {% if config.on_glance_aocs %} checked {% endif %} />
                     </label>
                     <br>
-                    <label for="camera_status">11. Display Camera Status? :
+                    <label for="camera_status">12. Display Camera Status? :
                         <input id="camera_status" name="on_glance_camera_status" type="checkbox" {% if config.on_glance_camera_status %} checked {% endif %} />
+                    </label>
+                    <br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+
+            <div id="HealthCheckThreshold" class="tabcontent active">
+                <form id="phase1_threshold" action="/config" method="POST">
+                    <input type="hidden" name="form_id" value="phase1_threshold">
+                    <label for="battery_voltage">1. Battery Voltage Limits (in Volts) :
+                        <input id="battery_voltage_lower" name="battery_voltage_lower" type="number" required value="{{ config.battery_voltage[0] }}"/>
+                        <input id="battery_voltage_upper" name="battery_voltage_upper" type="number" required value="{{ config.battery_voltage[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="battery_amps">2. Battery Current Limits (in Amps) :
+                        <input id="battery_amps_lower" name="battery_amps_lower" type="number" required value="{{ config.battery_amps[0] }}"/>
+                        <input id="battery_amps_upper" name="battery_amps_upper" type="number" required value="{{ config.battery_amps[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="battery_temp">3. Battery Temperature Limits (in Celcius) :
+                        <input id="battery_temp_lower" name="battery_temp_lower" type="number" required value="{{ config.battery_temp[0] }}"/>
+                        <input id="battery_temp_upper" name="battery_temp_upper" type="number" required value="{{ config.battery_temp[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="internal_temp">4. Internal Temperature Limits (in Celcius) :
+                        <input id="internal_temp_lower" name="internal_temp_lower" type="number" required value="{{ config.internal_temp[0] }}"/>
+                        <input id="internal_temp_upper" name="internal_temp_upper" type="number" required value="{{ config.internal_temp[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="downlink_freq">5. Downlink Frequency Limits (in MHz) :
+                        <input id="downlink_freq_lower" name="downlink_freq_lower" type="number" required value="{{ config.downlink_freq[0] }}"/>
+                        <input id="downlink_freq_upper" name="downlink_freq_upper" type="number" required value="{{ config.downlink_freq[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="uplink_freq">6. Uplink Frequency Limits (in MHz) :
+                        <input id="uplink_freq_lower" name="uplink_freq_lower" type="number" required value="{{ config.uplink_freq[0] }}"/>
+                        <input id="uplink_freq_upper" name="uplink_freq_upper" type="number" required value="{{ config.uplink_freq[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="signal_strength">7. Signal Strength Limits (in dBm) :
+                        <input id="signal_strength_lower" name="signal_strength_lower" type="number" required value="{{ config.signal_strength[0] }}"/>
+                        <input id="signal_strength_upper" name="signal_strength_upper" type="number" required value="{{ config.signal_strength[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="transmission_rate">8. Data Transmission Rate Limits (in dBm) :
+                        <input id="transmission_rate_lower" name="transmission_rate_lower" type="number" required value="{{ config.transmission_rate[0] }}"/>
+                        <input id="transmission_rate_upper" name="transmission_rate_upper" type="number" required value="{{ config.transmission_rate[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="gyro">9. Gyro Velocity Limits for X,Y and Z (in Degrees per Second):
+                        <input id="gyro_lower" name="gyro_lower" type="number" required value="{{ config.gyro[0] }}"/>
+                        <input id="gyro_upper" name="gyro_upper" type="number" required value="{{ config.gyro[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="orientation">10. Position Limits for X,Y and Z (in Degrees) :
+                        <input id="orientation_lower" name="orientation_lower" type="number" required value="{{ config.orientation[0] }}"/>
+                        <input id="orientation_upper" name="orientation_upper" type="number" required value="{{ config.orientation[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="reaction_rpm">11. RPM Limits (in rpm) :
+                        <input id="reaction_rpm_lower" name="reaction_rpm_lower" type="number" required value="{{ config.reaction_rpm[0] }}"/>
+                        <input id="reaction_rpm_upper" name="reaction_rpm_upper" type="number" required value="{{ config.reaction_rpm[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="memory_usage">12. Memory Ok Limits (in Percentage) :
+                        <input id="memory_usage_lower" name="memory_usage_lower" type="number" required value="{{ config.memory_usage[0] }}"/>
+                        <input id="memory_usage_upper" name="memory_usage_upper" type="number" required value="{{ config.memory_usage[1] }}"/>
+                    </label>
+                    <br>
+                    <label for="error_count">13. Error Count Limits (in Number of Errors) :
+                        <input id="error_count_lower" name="error_count_lower" type="number" required value="{{ config.error_count[0] }}"/>
+                        <input id="error_count_upper" name="error_count_upper" type="number" required value="{{ config.error_count[1] }}"/>
                     </label>
                     <br>
                     <input type="submit" value="Submit">

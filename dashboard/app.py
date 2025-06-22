@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 import json
 import datetime
 import fetch_info
+from typing import Tuple
 
 # Init
 app = Flask(__name__)
@@ -31,7 +32,7 @@ DEFAULT_AT_A_GLANCE_DATA = {
 # Config stuff
 
 DEFAULT_CONFIG = {
-    "refresh_time": 15,
+    "refresh_time": 15,  # start glance
     "on_glance_comm_status": True,
     "on_glance_cpu_usage": True,
     "on_glance_ram_usage": True,
@@ -43,14 +44,27 @@ DEFAULT_CONFIG = {
     "on_glance_cpu_temp": True,
     "on_glance_aocs": True,
     "on_glance_camera_status": True,
-    "credit_dev": True,
+    "credit_dev": True,  # global appearance
     "enable_light_mode": False,
     "enable_save_banner": True,
-    "sbc_ip_v4": "127.0.0.0",
+    "sbc_ip_v4": "127.0.0.0",  # global practical
     "sbc_port": 3141,
     "sbc_message_encryption_key": "",
     "enable_cam_livestream": False,
     "enable_manual_control": False,
+    "battery_voltage": (3.0, 4.2),  # phase 1  # temp
+    "battery_amps": (0.0, 2.0),  # temp
+    "battery_temp": (0.0, 40.0),  # temp
+    "internal_temp": (0.0, 50.0),  # temp
+    "downlink_freq": (400.0, 450.0),  # temp
+    "uplink_freq": (400.0, 450.0),  # temp
+    "signal_strength": (-120.0, 0.0),  # temp
+    "transmission_rate": (0.0, 10.0),  # temp
+    "gyro": (0.0, 360.0),
+    "orientation": (0.0, 360.0),
+    "reaction_rpm": (0.0, 100.0),  # temp
+    "memory_usage": (0.0, 95.0),
+    "error_count": (0, 0),
 }
 
 
@@ -136,6 +150,10 @@ def index():
 
 @app.route('/phase1')
 def phase1():
+    config_data = load_config(request)
+    if config_data == DEFAULT_CONFIG:
+        update_config(make_response(redirect(url_for('config'))), config_data)
+
     aocs_vals = fetch_info.get_aocs()
     battery_vals = fetch_info.get_battery_stats()
     current_time = datetime.datetime.now()
@@ -152,30 +170,93 @@ def phase1():
         "downlink_freq": comms_vals["downlink"],
         "uplink_freq": comms_vals["uplink"],
         "signal_strength": comms_vals["signal_strength"],
-        "data_transmission_rate": comms_vals["data_rate"],
+        "transmission_rate": comms_vals["data_rate"],
         "gyro": (aocs_vals["x_ang_rate"], aocs_vals["y_ang_rate"], aocs_vals["z_ang_rate"]),
         "orientation": (aocs_vals["x_pos"], aocs_vals["y_pos"], aocs_vals["z_pos"]),
         "mock_sun_status": aocs_vals["mock_sun_sensor"],
         "reaction_rpm": aocs_vals["rpm"],
         "camera_status": fetch_info.get_camera_status(),
         "memory_usage": fetch_info.get_ram_usage(),
-        "last_comm_date_time": comms_status["time"],
+        "last_comm_date": comms_status["time"],
         "uptime": round(fetch_info.get_uptime()/60, 2),
-        "error_count": fetch_info.get_error_count(),
+        "error_count": fetch_info.get_error_count()["error"],
     }
 
-    # Not implemented
-    health_check_values["battery_status"] = "OK" if health_check_values["battery_voltage"] > 0 else "NOT OK"
-    health_check_values["temperature_status"] = "OK" if health_check_values["internal_temp"] < 50 else "NOT OK"
+    # Battery
+    if not (config_data["battery_voltage"][0] <= health_check_values["battery_voltage"] <= config_data["battery_voltage"][1]):
+        health_check_values["battery_status"] = "NOT OK"
+    elif not (config_data["battery_amps"][0] <= health_check_values["battery_amps"] <= config_data["battery_amps"][1]):
+        health_check_values["battery_status"] = "NOT OK"
+    elif not (config_data["battery_temp"][0] <= health_check_values["battery_temp"] <= config_data["battery_temp"][1]):
+        health_check_values["battery_status"] = "NOT OK"
+    else:
+        health_check_values["battery_status"] = "OK"
 
-    health_check_values["comm_status"] = comms_status["status"]
+    # Temperature
+    if config_data["internal_temp"][0] <= health_check_values["internal_temp"] <= config_data["internal_temp"][1]:
+        health_check_values["temperature_status"] = "OK"
+    else:
+        health_check_values["temperature_status"] = "NOT OK"
 
-    health_check_values["aocs_status"] = "OK" if health_check_values["gyro"] != (0, 0, 0) else "NOT OK"
-    health_check_values["payload_status"] = "OK" if health_check_values["camera_status"] == "ON" else "NOT OK"
-    health_check_values["command_status"] = "OK" if health_check_values["last_comm_date_time"] != "NOT IMPLEMENTED" else "NOT OK"
-    health_check_values["error_log"] = "No critical errors detected." if health_check_values["error_count"] == 0 else "Critical errors detected, check log for details."
-    health_check_values["overall_status"] = "No anomalies detected." if health_check_values["error_count"] == 0 else f"{health_check_values['error_count']} anomalies detected."
-    health_check_values["recommended_action"] = "Continue standard operations." if health_check_values["error_count"] == 0 else "Solve the issues stated in error log, and rerun the health check."
+    # Communication
+    if not (config_data["downlink_freq"][0] <= health_check_values["downlink_freq"] <= config_data["downlink_freq"][1]):
+        health_check_values["comm_status"] = "NOT OK"
+    elif not (config_data["uplink_freq"][0] <= health_check_values["uplink_freq"] <= config_data["uplink_freq"][1]):
+        health_check_values["comm_status"] = "NOT OK"
+    elif not (config_data["signal_strength"][0] <= health_check_values["signal_strength"] <= config_data["signal_strength"][1]):
+        health_check_values["comm_status"] = "NOT OK"
+    elif not (config_data["transmission_rate"][0] <= health_check_values["transmission_rate"] <= config_data["transmission_rate"][1]):
+        health_check_values["comm_status"] = "NOT OK"
+    else:
+        health_check_values["comm_status"] = "OK"
+
+    # AOCS
+    if not (config_data["gyro"][0] <= health_check_values["gyro"][0] <= config_data["gyro"][1]):
+        health_check_values["aocs_status"] = "NOT OK"
+    elif not (config_data["gyro"][0] <= health_check_values["gyro"][1] <= config_data["gyro"][1]):
+        health_check_values["aocs_status"] = "NOT OK"
+    elif not (config_data["gyro"][0] <= health_check_values["gyro"][2] <= config_data["gyro"][1]):
+        health_check_values["aocs_status"] = "NOT OK"
+    elif not (config_data["orientation"][0] <= health_check_values["orientation"][0] <= config_data["orientation"][1]):
+        health_check_values["aocs_status"] = "NOT OK"
+    elif not (config_data["orientation"][0] <= health_check_values["orientation"][1] <= config_data["orientation"][1]):
+        health_check_values["aocs_status"] = "NOT OK"
+    elif not (config_data["orientation"][0] <= health_check_values["orientation"][2] <= config_data["orientation"][1]):
+        health_check_values["aocs_status"] = "NOT OK"
+    elif not (config_data["reaction_rpm"][0] <= health_check_values["reaction_rpm"] <= config_data["reaction_rpm"][1]):
+        health_check_values["aocs_status"] = "NOT OK"
+    elif health_check_values["mock_sun_status"] != "ACTIVE":
+        health_check_values["aocs_status"] = "NOT OK"
+    else:
+        health_check_values["aocs_status"] = "OK"
+
+    # Payload
+    if health_check_values["camera_status"] == "NOT OPERATIONAL":
+        health_check_values["payload_status"] = "NOT OK"
+    else:
+        health_check_values["payload_status"] = "OK"
+
+    # Data and System
+    if not (config_data["memory_usage"][0] <= health_check_values["memory_usage"] <= config_data["memory_usage"][1]):
+        health_check_values["system_status"] = "NOT OK"
+    elif not comms_status["status"]:
+        health_check_values["system_status"] = "NOT OK"
+    else:
+        health_check_values["system_status"] = "OK"
+
+    # Error
+    if config_data["error_count"][0] <= health_check_values["error_count"] <= config_data["error_count"][1]:
+        health_check_values["error_log"] = "No critical errors detected."
+    else:
+        health_check_values["error_log"] = "Critical errors detected, check log for details."
+
+    # Overall
+    if health_check_values["battery_status"] == "NOT OK" or health_check_values["temperature_status"] == "NOT OK" or health_check_values["comm_status"] == "NOT OK" or health_check_values["aocs_status"] == "NOT OK" or health_check_values["camera_status"] == "NOT OK" or health_check_values["system_status"] == "NOT OK" or health_check_values["error_count"] > 0:
+        health_check_values["overall_status"] = "Anomalies detected."
+        health_check_values["recommended_action"] = "Solve the issues stated in error log, and rerun the health check."
+    else:
+        health_check_values["overall_status"] = "No anomalies detected."
+        health_check_values["recommended_action"] = "Continue standard operations."
 
     return render_template('phase1.html', values=health_check_values)
 
@@ -198,8 +279,8 @@ def log():
 @app.route('/config', methods=['GET', 'POST'])
 def config():
     config_data = load_config(request)
-    if config == DEFAULT_CONFIG:
-        update_config(make_response(redirect(url_for('config'))), config)
+    if config_data == DEFAULT_CONFIG:
+        update_config(make_response(redirect(url_for('config'))), config_data)
     message = None
 
     if request.method == "POST":
@@ -218,6 +299,47 @@ def config():
             config_data["on_glance_cpu_temp"] = "on_glance_cpu_temp" in request.form
             config_data["on_glance_aocs"] = "on_glance_aocs" in request.form
             config_data["on_glance_camera_status"] = "on_glance_camera_status" in request.form
+
+        elif form_id == "phase1_threshold":
+            config_data["battery_voltage"] = (
+                float(request.form.get("battery_voltage_lower")), float(request.form.get("battery_voltage_upper"))
+            )
+            config_data["battery_amps"] = (
+                float(request.form.get("battery_amps_lower")), float(request.form.get("battery_amps_upper"))
+            )
+            config_data["battery_temp"] = (
+                float(request.form.get("battery_temp_lower")), float(request.form.get("battery_temp_upper"))
+            )
+            config_data["internal_temp"] = (
+                float(request.form.get("internal_temp_lower")), float(request.form.get("internal_temp_upper"))
+            )
+            config_data["downlink_freq"] = (
+                float(request.form.get("downlink_freq_lower")), float(request.form.get("downlink_freq_upper"))
+            )
+            config_data["uplink_freq"] = (
+                float(request.form.get("uplink_freq_lower")), float(request.form.get("uplink_freq_upper"))
+            )
+            config_data["signal_strength"] = (
+                float(request.form.get("signal_strength_lower")), float(request.form.get("signal_strength_upper"))
+            )
+            config_data["transmission_rate"] = (
+                float(request.form.get("transmission_rate_lower")), float(request.form.get("transmission_rate_upper"))
+            )
+            config_data["gyro"] = (
+                float(request.form.get("gyro_lower")), float(request.form.get("gyro_upper"))
+            )
+            config_data["orientation"] = (
+                float(request.form.get("orientation_lower")), float(request.form.get("orientation_upper"))
+            )
+            config_data["reaction_rpm"] = (
+                float(request.form.get("reaction_rpm_lower")), float(request.form.get("reaction_rpm_upper"))
+            )
+            config_data["memory_usage"] = (
+                float(request.form.get("memory_usage_lower")), float(request.form.get("memory_usage_upper"))
+            )
+            config_data["error_count"] = (
+                float(request.form.get("error_count_lower")), float(request.form.get("error_count_upper"))
+            )
 
         elif form_id == "global_appearance_form":
             config_data["credit_dev"] = "enable_credit_dev" in request.form
