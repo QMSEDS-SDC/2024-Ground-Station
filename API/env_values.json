@@ -1,0 +1,5 @@
+{
+    "CUBESAT_HOST": "10.63.215.64",
+    "SEND_PORT": 8080,
+    "RECEIVE_PORT": 8090
+}
