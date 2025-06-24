@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 import json
 import datetime
 import fetch_info
+import send_info
 
 # Init
 app = Flask(__name__)
@@ -260,12 +261,16 @@ def phase1():
     return render_template('phase1.html', values=health_check_values)
 
 
-@app.route('/phase2')
+@app.route('/phase2', methods=['GET', 'POST'])
 def phase2():
-
-
-
-    return render_template('phase2.html')
+    if request.method == 'POST':
+        selected = request.form.getlist('selected')
+        images = fetch_info.get_phase2_images()
+        targets = {k: images[k][1] for k in selected}
+        send_info.send_targets(targets)
+        return redirect(url_for('phase2'))
+    images = fetch_info.get_phase2_images()
+    return render_template('phase2.html', images=images)
 
 
 @app.route('/phase3')

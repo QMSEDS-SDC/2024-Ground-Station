@@ -6,7 +6,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>QM Starlight</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script defer src="{{ url_for('static', filename='index_script.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='phase2.js') }}"></script>
 </head>
 <body>
     <div class="header">
@@ -14,7 +14,20 @@
             <h1>Dashboard - Phase 2</h1>
         </button>
     </div>
-</body>
+    <form method="post">
+        <div id="images">
+            {% for digit, (img, aocs) in images.items() %}
+            <div style="display:inline-block; margin:10px; text-align:center;">
+                <label>
+                    <input type="checkbox" name="selected" value="{{ digit }}">
+                    <img src="data:image/png;base64,{{ img }}" width="64" height="64" style="border:2px solid #888;cursor:pointer;">
+                </label>
+                <div>AOCS: x={{ aocs.x }}, y={{ aocs.y }}, z={{ aocs.z }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <button id="send-btn" type="submit">Send Selected</button>
+    </form>
 <footer>
     {% if config.credit_dev %}
     <p>By <a href="https://github.com/ayashrath" target="_blank">Ayash Rath</a>, Software Member of the <a href="https://www.qmsu.org/groups/25974/" target="_blank">QMSEDS Society</a> (Queen Mary Univeristy of London)</p>

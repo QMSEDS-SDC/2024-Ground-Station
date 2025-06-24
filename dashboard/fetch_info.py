@@ -4,6 +4,10 @@ Has functions which aid in fetching information needed for the dashboard from th
 
 from typing import Dict
 import random
+import base64
+import io
+from PIL import Image
+import numpy as np
 
 
 def get_comm_status() -> bool:
@@ -206,3 +210,23 @@ def get_camera_status() -> bool:
     status = random.choice([True, False])
 
     return status
+
+def get_phase2_images():
+    """
+    Returns a dict: {digit: (base64_img_str, aocs_pos)}
+    """
+    images = {}
+    for digit in range(5):  # Example: 5 images
+        # Generate a random image (replace with real image logic)
+        arr = np.random.randint(0, 255, (64, 64, 3), dtype=np.uint8)
+        img = Image.fromarray(arr)
+        buf = io.BytesIO()
+        img.save(buf, format='PNG')
+        img_b64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+        aocs_pos = {
+            "x": np.random.randint(0, 360),
+            "y": np.random.randint(0, 360),
+            "z": np.random.randint(0, 360)
+        }
+        images[str(digit)] = (img_b64, aocs_pos)
+    return images
