@@ -305,9 +305,22 @@ footer a:hover {
 
 /* Styles for the Phase 1 section */
 .phase1-section {
-  margin-left: 20px;
+  margin: 20px 0; /* vertical spacing only */
 }
 
 .phase1-section h2{
   text-decoration: underline;
+}
+
+.save-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw; /* Ensure full viewport width */
+}
+
+#save-report-button {
+  padding: 6px 12px;
+  font-size: 0.85em;
+  margin: 20px 0 30px 0;
 }

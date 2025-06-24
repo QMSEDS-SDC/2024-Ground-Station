@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 import json
 import datetime
 import fetch_info
-from typing import Tuple
 
 # Init
 app = Flask(__name__)
@@ -263,6 +262,9 @@ def phase1():
 
 @app.route('/phase2')
 def phase2():
+
+
+
     return render_template('phase2.html')
 
 

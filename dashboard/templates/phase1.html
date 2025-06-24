@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>QMStarlight</title>
+    <title>QM Starlight</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script defer src="{{ url_for('static', filename='phase1.js') }}"></script>
 </head>
@@ -86,7 +86,9 @@
             <li><strong>Recommended Actions:</strong> {{ values.recommended_action }}</li>
         </ul>
     </div>
-    <button id="save-report-button">Save Report</button>
+    <div class="save-btn-container">
+        <button id="save-report-button">Save Report</button>
+    </div>
 </body>
 <footer>
     {% if config.credit_dev %}
