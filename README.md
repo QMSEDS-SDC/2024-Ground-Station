@@ -55,3 +55,8 @@ The **Ground API** facilitates communication between the CubeSat and the ground 
 The design takes inspiration from **Proxmox’s Interface**, focusing on simplicity and functionality. Although the use cases differ, the shared goal is system management. The GUI provides a streamlined workflow for monitoring, controlling, and troubleshooting the CubeSat.
 
 ![Interface Mockup](./img_src/image.png)
+
+
+## Initial Setup
+
+Have the hostname of the pc as - "ground-station".
