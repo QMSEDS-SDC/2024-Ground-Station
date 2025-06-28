@@ -53,24 +53,27 @@ class Client_Comms:
         return False
     
     def _receive_loop(self):
-        """Always allow to receive messages"""
+        """Continuously receive and process JSON messages from the server."""
+        buffer = ""
+    
         while self.running and self.connected:
             try:
-                # Receive data from server
-                data = self.client_socket.recv(1024).decode("utf-8")
-
-                if not data:
+                chunk = self.client_socket.recv(1024).decode("utf-8")
+                if not chunk:
                     self.connected = False
                     break
                 
-                # Process single JSON message (remove buffer logic)
-                if data.strip():
-                    try:
-                        json_message = json.loads(data.strip())
-                        self.handle_received_message(json_message)
-                    except json.JSONDecodeError:
-                        pass
-                    
+                buffer += chunk
+    
+                while "\n" in buffer:
+                    msg, buffer = buffer.split("\n", 1)
+                    if msg.strip():
+                        try:
+                            json_message = json.loads(msg.strip())
+                            self.handle_received_message(json_message)
+                        except json.JSONDecodeError:
+                            print("Received invalid JSON.")
+    
             except socket.timeout:
                 continue
             except ConnectionResetError:
@@ -138,7 +141,7 @@ class Client_Comms:
 
         try:
             # Remove newline delimiter - send pure JSON
-            json_string = json.dumps(message_data)
+            json_string = json.dumps(message_data) + "\n"  # Add delimiter
             self.client_socket.sendall(json_string.encode("utf-8"))
             return True
         except Exception:
@@ -156,6 +159,10 @@ class Client_Comms:
         
         if self.client_socket:
             try:
+                try:
+                    self.client_socket.shutdown(socket.SHUT_RDWR)
+                except Exception:
+                    pass
                 self.client_socket.close()
             except Exception:
                 pass
