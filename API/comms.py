@@ -10,19 +10,19 @@ class Client_Comms:
     To send commands and get stuff from CubeSat
     """
     
-    def __init__(self, port_code="MAIN_PORT"):
+    def __init__(self):
         # contains info that is common with cubesat
         env_path = os.path.join(os.path.dirname(__file__), "env_values.json")
         with open(env_path, "r") as f:
             self.env = json.load(f)
         
         self.receive_host = self.env["CUBESAT_HOST"]
-        self.receive_port = self.env[port_code]
+        self.receive_port = self.env["MAIN_PORT"]
         
         self.client_socket = None
         self.connected = False
         self.running = False
-        self.receive_thread = None        
+        self.receive_thread = None
 
         # response storage
         self.last_response = None
@@ -83,49 +83,49 @@ class Client_Comms:
     def handle_received_message(self, json_message):
         """Process received JSON messages from server"""
         message_type = json_message.get("type", "NA")
-    
+
         if message_type == "status":
             response = json_message.get("message", [])
             print(f"Status received: {response}")
             # TODO: Call GUI update function - gui.update_sensor_status(response)
             return response
-    
+
         elif message_type == "response":
             result = json_message.get("message", 0)
             print(f"Operation response: {result}")
             # TODO: Call GUI update function - gui.update_operation_result(result)
             return result
-    
+
         elif message_type == "p2_info":
             payload_data = json_message.get("message", {})
             print(f"Payload 2 info: {payload_data}")
             # TODO: Call GUI update function - gui.update_payload2_info(payload_data)
             return payload_data
-    
+
         elif message_type == "p2_cmd":
             command_results = json_message.get("message", {})
             print(f"Payload 2 command results: {command_results}")
             # TODO: Call GUI update function - gui.update_payload2_commands(command_results)
             return command_results
-    
+
         elif message_type == "p3_info":
             payload3_data = json_message.get("message", {})
             print(f"Payload 3 info: {payload3_data}")
             # TODO: Call GUI update function - gui.update_payload3_info(payload3_data)
             return payload3_data
-    
+
         elif message_type == "img":
             image_data = json_message.get("message", [])
             print(f"Image data received (length: {len(image_data)})")
             # TODO: Call GUI update function - gui.display_image(image_data)
             return image_data
-    
+
         elif message_type == "Error":
             error_code = json_message.get("message", -1)
             print(f"Server error code: {error_code}")
             # TODO: Call GUI update function - gui.show_error(error_code)
             return error_code
-            
+
         else:
             print(f"Unknown message type: {message_type}")
             # TODO: Call GUI update function - gui.log_unknown_message(json_message)

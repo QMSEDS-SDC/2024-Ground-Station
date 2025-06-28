@@ -3,3 +3,4 @@ flask-socketio==5.5.1
 uwsgi==2.0.30
 wheel==0.45.1
 pillow==11.2.1
+cryptography=45.0.4
